@@ -34,8 +34,7 @@ echo dbpath=%MONGO_DIR%\data\db
 ) > "%MONGO_DIR%\mongod.cfg"
 "%MONGO_DIR%\bin\mongod.exe" --config "%MONGO_DIR%\mongod.cfg" --install
 net start MongoDB
-"%MONGO_DIR%\bin\mongo.exe" --eval "use solodev_views"
-"%MONGO_DIR%\bin\mongo.exe" --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
+"%MONGO_DIR%\bin\mongo.exe" solodev_views --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
 
 
 cd C:\inetpub\Solodev\clients\solodev\

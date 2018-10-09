@@ -35,6 +35,14 @@ copy /Y ioncube\ioncube_loader_win_5.6.dll "%PHP_DIR%\ext"
 rd /s /q ioncube
 del ioncube.zip
 
+
+@powershell [Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -OutFile mongodb.zip http://windows.php.net/downloads/pecl/releases/mongodb/1.5.3/php_mongodb-1.5.3-5.6-nts-vc11-x86.zip
+mkdir mongodb
+7z x -omongodb mongodb.zip
+copy /Y mongodb\php_mongodb.dll "%PHP_DIR%\ext" 
+rd /s /q mongodb
+del mongodb.zip
+
 copy /Y "%PHP_DIR%\php.ini-production" "%PHP_DIR%\php.ini" 
 
 (
@@ -68,6 +76,7 @@ echo extension=php_pdo_mysql.dll
 echo extension=php_pdo_sqlite.dll
 echo extension=php_imap.dll
 echo extension=php_tidy.dll
+echo extension=php_mongodb.dll
 ) >> "%PHP_DIR%\php.ini"
 
 echo zend_extension = "%PHP_DIR%\ext\ioncube_loader_win_5.6.dll" >> "%PHP_DIR%\php.ini"
