@@ -1,7 +1,7 @@
 @echo off
 echo ---------------------
 echo IMPORTANT!! DO NOT CLOSE!!
-echo Please Wait - Initializing Solodev CMS and Database
+echo Please Wait - Initializing App
 echo ---------------------
 
 iisreset /stop
@@ -20,7 +20,7 @@ del instance_id.txt
 echo sql_mode=NO_ENGINE_SUBSTITUTION >> C:\tools\mysql\current\my.ini
 net stop MySQL
 net start MySQL
-C:\tools\mysql\current\bin\mysql.exe -uroot -e "CREATE DATABASE solodev_solodev" 
+C:\tools\mysql\current\bin\mysql.exe -uroot -e "CREATE DATABASE solodev" 
 C:\tools\mysql\current\bin\mysql.exe -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('%EC2_INSTANCE_ID%');"
 
 
@@ -40,7 +40,7 @@ net start MongoDB
 cd C:\inetpub\Solodev\clients\solodev\
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', 'localhost' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content Client_Settings.xml"
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev_solodev' } | Set-Content Client_Settings.xml"
+@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBUSER', 'root'} | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content Client_Settings.xml"
 
@@ -118,3 +118,6 @@ del CreateShortcut.vbs
 
 del "C:\Program Files\Amazon\Ec2ConfigService\Scripts\SolodevSetup.cmd"
 
+echo ---------------------
+echo FINISHED
+echo ---------------------

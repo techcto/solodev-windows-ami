@@ -11,32 +11,18 @@ phases:
       - python get-pip.py
       - pip install awscli
       - aws --version
-      - curl -qL -o aws_credentials.json http://169.254.170.2/$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > aws_credentials.json
+      - curl -qL -o aws_credentials.json http://169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > aws_credentials.json
       - aws configure set region $AWS_REGION
       - aws configure set aws_access_key_id `./jq -r '.AccessKeyId' aws_credentials.json`
       - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
       - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
-      - chmod 700 hashicorp/init-scripts/install-solodev.sh
-      - sudo hashicorp/init-scripts/install-solodev.sh
+      - chmod 700 hashicorp/init-scripts/*.sh
+      - sudo hashicorp/init-scripts/install.sh
   build:
     commands:
-      - FORCE_BUILDS=false
-      - |
-        TIME_DIFF_LATEST_FILE=$(($(date +%s)-$(find hashicorp/solodev-php-56/windows-2012 -printf "%Ts\n" | sort | tail -1)))
-        if [ "$FORCE_BUILDS" = true ] || [ $TIME_DIFF_LATEST_FILE -lt 3600 ] ; then
-        echo "Validating - solodev-single-windows-2012-packer.json"
-        ./packer validate hashicorp/solodev-php-56/windows-2012/config/solodev-single-windows-2012-packer.json
-        echo "Building HashiCorp Packer template - solodev-single-windows-2012-packer.json"
-        ./packer build hashicorp/solodev-php-56/windows-2012/config/solodev-single-windows-2012-packer.json
-        fi
-      - |
-        TIME_DIFF_LATEST_FILE=$(($(date +%s)-$(find hashicorp/solodev-php-56/windows-2016 -printf "%Ts\n" | sort | tail -1)))
-        if [ "$FORCE_BUILDS" = true ] || [ $TIME_DIFF_LATEST_FILE -lt 3600 ] ; then
-        echo "Validating - solodev-single-windows-2016-packer.json"
-        ./packer validate hashicorp/solodev-php-56/windows-2016/config/solodev-single-windows-2016-packer.json
-        echo "Building HashiCorp Packer template - solodev-single-windows-2016-packer.json"
-        ./packer build hashicorp/solodev-php-56/windows-2016/config/solodev-single-windows-2016-packer.json
-        fi
+      - chmod 700 build.sh
+      - ./build.sh hashicorp/solodev-phpfpm-72/aws1/config hashicorp/solodev-php-72/windows-2016/config/solodev-windows-2016-php72.json
   post_build:
     commands:
+      - sudo hashicorp/init-scripts/cleanup.sh
       - echo "HashiCorp Packer build completed on `date`"
