@@ -35,10 +35,9 @@
     }],
     "provisioners": [
         {
-            "type": "powershell",
-            "inline": [
-                "Copy-Item -Path /tmp/Solodev.zip -Destination 'C:\\Windows\\Temp\\'"
-            ]
+            "type": "file",
+            "source": "/tmp/Solodev.zip",
+            "destination": "C:\\Windows\\Temp\\"
         },
         {
             "type": "windows-shell",
