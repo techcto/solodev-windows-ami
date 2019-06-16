@@ -42,14 +42,14 @@
         {
             "type": "windows-shell",
             "inline": [
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\base.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\php.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\mongo.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\mysql.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\mssql.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\node.bat",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\solodev.ps1",
-                "C:\\Windows\\Temp\\hashicorp\\solodev-php-72\\windows-2016\\scripts\\system.ps1",
+                "C:\\Windows\\Temp\\scripts\\base.bat",
+                "C:\\Windows\\Temp\\scripts\\php.bat",
+                "C:\\Windows\\Temp\\scripts\\mongo.bat",
+                "C:\\Windows\\Temp\\scripts\\mysql.bat",
+                "C:\\Windows\\Temp\\scripts\\mssql.bat",
+                "C:\\Windows\\Temp\\scripts\\node.bat",
+                "C:\\Windows\\Temp\\scripts\\solodev.ps1",
+                "C:\\Windows\\Temp\\scripts\\system.ps1",
                 "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
                 "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1"
             ]
