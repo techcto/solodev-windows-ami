@@ -37,7 +37,7 @@
         {
             "type": "powershell",
             "inline": [
-                "Copy-Item -Path /tmp/Solodev.zip -Destination 'C:\\Windows\\Temp\\' -ToSession (New-PSSession -ComputerName SERVER1)"
+                "Copy-Item -Path /tmp/Solodev.zip -Destination 'C:\\Windows\\Temp\\'"
             ]
         },
         {
