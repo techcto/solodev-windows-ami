@@ -1,2 +1,2 @@
 cd /tmp
-rm -Rf app
+rm -Rf *

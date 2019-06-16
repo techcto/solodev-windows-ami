@@ -12,7 +12,7 @@
         "type": "amazon-ebs",
         "region": "{{user `aws_region`}}",
         "profile": "{{ user `aws_profile`}}",
-        "instance_type": "t2.small",
+        "instance_type": "m3.medium",
         "ssh_username": "ec2-user",
         "ami_name": "{{user `aws_ami_name`}}",
         "ami_description": "Solodev DCX Windows 2016 Edition",
@@ -36,7 +36,7 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "/tmp/app/Solodev.zip",
+            "source": "/tmp/Solodev.zip",
             "destination": "C:\\Windows\\Temp\\"
         },
         {
