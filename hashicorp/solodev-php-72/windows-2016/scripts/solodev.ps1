@@ -1,6 +1,6 @@
-cd C:\tmp
-mkdir C:\Solodev
-mv Solodev.zip C:\Solodev\
-cd C:\Solodev
+cd c:\temp
+mkdir c:\Solodev
+mv Solodev.zip c:\Solodev\
+cd c:\Solodev
 7z x Solodev.zip
 del Solodev.zip
