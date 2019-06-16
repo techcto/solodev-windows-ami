@@ -1,4 +1,4 @@
-cd c:\temp
+cd C:\Windows\Temp
 mkdir c:\Solodev
 mv Solodev.zip c:\Solodev\
 cd c:\Solodev

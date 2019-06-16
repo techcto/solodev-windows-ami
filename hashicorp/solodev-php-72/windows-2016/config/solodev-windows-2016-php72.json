@@ -37,7 +37,7 @@
         {
             "type": "file",
             "source": "/tmp/app/Solodev.zip",
-            "destination": "c:\\temp\\"
+            "destination": "C:\\Windows\\Temp\\"
         },
         {
             "type": "windows-shell",
