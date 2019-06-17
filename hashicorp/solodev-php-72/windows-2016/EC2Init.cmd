@@ -5,16 +5,20 @@ echo Please Wait - Initializing App
 echo ---------------------
 
 iisreset /stop
+mkdir C:\inetpub\Solodev
 
 cd C:\inetpub\Solodev
 
 mkdir tmp
 echo installing... >> tmp\app.log
 mkdir clients\solodev
-mkdir clients\solodev\jwt
 
-openssl genrsa -passout pass:ocoa -out C:\inetpub\Solodev\clients\solodev\jwt\private.pem 4096
-openssl rsa -pubout -passin pass:ocoa -in C:\inetpub\Solodev\clients\solodev\jwt\private.pem -out C:\inetpub\Solodev\clients\solodev\jwt\public.pem
+mkdir clients\solodev\jwt
+openssl genrsa -passout pass:ocoa -out clients\solodev\jwt\private.pem 4096
+openssl rsa -pubout -passin pass:ocoa -in clients\solodev\jwt\private.pem -out clients\solodev\jwt\public.pem
+REM ssh-keygen -t rsa -b 4096 -f jwt\private -P ocoa
+REM ren jwt\private private.pem
+REM ren jwt\private.pub public.pem
 
 icacls "C:\inetpub\Solodev" /t /grant Users:F
 
@@ -22,11 +26,16 @@ icacls "C:\inetpub\Solodev" /t /grant Users:F
 set /p EC2_INSTANCE_ID=<instance_id.txt
 del instance_id.txt
 
-echo sql_mode=NO_ENGINE_SUBSTITUTION >> C:\tools\mysql\current\my.ini
-net stop MySQL
-net start MySQL
-C:\tools\mysql\current\bin\mysql.exe -uroot -e "CREATE DATABASE solodev" 
-C:\tools\mysql\current\bin\mysql.exe -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('%EC2_INSTANCE_ID%');"
+sqlcmd -S .\SQLEXPRESS -Q "CREATE DATABASE solodev"
+sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa ENABLE"
+sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa WITH PASSWORD = '%EC2_INSTANCE_ID%'"
+REM sqlcmd -S .\SQLEXPRESS -Q "CREATE LOGIN root WITH PASSWORD = '%EC2_INSTANCE_ID%'"
+REM sqlcmd -S .\SQLEXPRESS -Q "CREATE USER root FOR LOGIN root"
+REM sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN root ENABLE"
+sqlcmd -S .\SQLEXPRESS -Q "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE',N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2"
+
+net stop MSSQL$SQLEXPRESS
+net start MSSQL$SQLEXPRESS
 
 set MONGO_DIR=C:\Program Files\MongoDB\Server\3.4
 
@@ -38,7 +47,8 @@ echo dbpath=%MONGO_DIR%\data\db
 ) > "%MONGO_DIR%\mongod.cfg"
 "%MONGO_DIR%\bin\mongod.exe" --config "%MONGO_DIR%\mongod.cfg" --install
 net start MongoDB
-"%MONGO_DIR%\bin\mongo.exe" solodev_views --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
+"%MONGO_DIR%\bin\mongo.exe" --eval "use solodev_views"
+"%MONGO_DIR%\bin\mongo.exe" --eval "db.createUser({\"user\": \"root\", \"pwd\": \"password\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
 
 cd C:\inetpub\Solodev\public\www
 (
@@ -63,13 +73,11 @@ echo DBMS=mssqlnative
 echo MONGO_HOST=REPLACE_WITH_MONGOHOST:27017
 echo IS_ISV=
 ) > .env
-
-cd C:\inetpub\Solodev\clients\solodev\
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', 'localhost' } | Set-Content Client_Settings.xml"
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content Client_Settings.xml"
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content Client_Settings.xml"
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBUSER', 'root'} | Set-Content Client_Settings.xml"
-@powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content Client_Settings.xml"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', '.\SQLEXPRESS' } | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBUSER', 'sa'} | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content .env"
 
 C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
 C:\Windows\System32\inetsrv\appcmd.exe add site /name:"Solodev" /id:1 /physicalPath:"C:\inetpub\Solodev\public\www"
@@ -77,7 +85,6 @@ C:\Windows\System32\inetsrv\appcmd.exe set site /site.name:Solodev /+bindings.[p
 C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/api" /physicalPath:"C:\inetpub\Solodev\core\api"
 C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/CK" /physicalPath:"C:\inetpub\Solodev\public\www\node_modules\ckeditor-full"
 C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/core" /physicalPath:"C:\inetpub\Solodev\core\html_core"
-
 C:\Windows\System32\inetsrv\appcmd.exe stop site /site.name:Solodev
 C:\Windows\System32\inetsrv\appcmd.exe start site /site.name:Solodev
 
@@ -116,5 +123,3 @@ echo oLink.Arguments = "solodev.zendesk.com/hc/en-us/sections/206208667-Quick-St
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
-
-del "C:\Program Files\Amazon\Ec2ConfigService\Scripts\EC2Init.cmd"
