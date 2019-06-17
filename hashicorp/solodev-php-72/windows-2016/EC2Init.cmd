@@ -88,5 +88,4 @@ echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
 
-del "C:\Program Files\Amazon\Ec2ConfigService\Scripts\SolodevSetup.cmd"
-
+del "C:\Program Files\Amazon\Ec2ConfigService\Scripts\EC2Init.cmd"

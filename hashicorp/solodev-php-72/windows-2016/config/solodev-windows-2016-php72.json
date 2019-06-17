@@ -47,13 +47,13 @@
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mongo.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mysql.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.bat"
+                "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat"
             ]
         },
         {
             "type": "powershell",
             "scripts": [
+                "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/system.ps1"
             ]
         },

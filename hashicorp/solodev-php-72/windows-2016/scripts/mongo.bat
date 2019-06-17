@@ -3,7 +3,6 @@ echo ---------------------
 echo Installing Mongo
 echo ---------------------
 
-@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 choco install mongodb -version 3.4.7 -y
 
 SET PHP_DIR=C:\tools\php
