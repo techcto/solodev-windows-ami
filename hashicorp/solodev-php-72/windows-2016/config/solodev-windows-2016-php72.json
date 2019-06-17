@@ -37,7 +37,7 @@
         {
             "type": "file",
             "source": "hashicorp/solodev-php-72/windows-2016/EC2Init.cmd",
-            "destination": "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\EC2Init.cmd"
+            "destination": "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\EC2Init.cmd"
         },
         {
             "type": "windows-shell",
@@ -47,13 +47,13 @@
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mongo.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mysql.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat"
+                "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat",
+                "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.bat"
             ]
         },
         {
             "type": "powershell",
             "scripts": [
-                "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/system.ps1"
             ]
         },
@@ -65,8 +65,8 @@
         {
             "type": "powershell",
             "inline": [
-                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
-                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1"
+                "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+                "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1"
             ]
         }
     ]

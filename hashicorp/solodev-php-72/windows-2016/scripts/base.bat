@@ -8,7 +8,7 @@ echo ---------------------
 choco install IIS-WebServerRole --source WindowsFeatures
 choco install IIS-ISAPIFilter --source WindowsFeatures
 choco install IIS-ISAPIExtensions --source WindowsFeatures
-choco install IIS-NetFxExtensibility --source WindowsFeatures
+REM choco install IIS-NetFxExtensibility --source WindowsFeatures
 choco install IIS-CGI --source WindowsFeatures
 
 
