@@ -7,3 +7,5 @@ echo ---------------------
 
 choco install IIS-WebServerRole IIS-ISAPIFilter IIS-ISAPIExtensions IIS-CGI --source WindowsFeatures
 choco install urlrewrite vcredist2012 vcredist2013 awscli googlechrome 7zip openssl.light -y
+
+SET PHP_DIR=C:\tools\php
