@@ -6,12 +6,12 @@ echo ---------------------
 
 iisreset /stop
 
-cd C:\Solodev
+cd c:\inetpub\Solodev
 
 mkdir Solodev\clients\solodev
 copy Solodev\core\aws\Client_Settings.xml Solodev\clients\solodev
 
-icacls "C:\Solodev" /t /grant Users:F
+icacls "c:\inetpub\Solodev" /t /grant Users:F
 
 @powershell invoke-restmethod -uri http://169.254.169.254/latest/meta-data/instance-id > instance_id.txt
 set /p EC2_INSTANCE_ID=<instance_id.txt
@@ -35,7 +35,7 @@ echo dbpath=%MONGO_DIR%\data\db
 net start MongoDB
 "%MONGO_DIR%\bin\mongo.exe" solodev_views --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
 
-cd C:\Solodev\clients\solodev\
+cd c:\inetpub\Solodev\clients\solodev\
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', 'localhost' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content Client_Settings.xml"
@@ -43,21 +43,21 @@ cd C:\Solodev\clients\solodev\
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content Client_Settings.xml"
 
 C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
-C:\Windows\System32\inetsrv\appcmd.exe add site /name:"Solodev" /id:1 /physicalPath:"C:\Solodev\public\www"
+C:\Windows\System32\inetsrv\appcmd.exe add site /name:"Solodev" /id:1 /physicalPath:"c:\inetpub\Solodev\public\www"
 C:\Windows\System32\inetsrv\appcmd.exe set site /site.name:Solodev /+bindings.[protocol='http',bindingInformation='*:80:']
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/api" /physicalPath:"C:\Solodev\core\api"
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/CK" /physicalPath:"C:\Solodev\public\www\node_modules\ckeditor-full"
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/core" /physicalPath:"C:\Solodev\core\html_core"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/api" /physicalPath:"c:\inetpub\Solodev\core\api"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/CK" /physicalPath:"c:\inetpub\Solodev\public\www\node_modules\ckeditor-full"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/core" /physicalPath:"c:\inetpub\Solodev\core\html_core"
 
 C:\Windows\System32\inetsrv\appcmd.exe stop site /site.name:Solodev
 C:\Windows\System32\inetsrv\appcmd.exe start site /site.name:Solodev
 
-icacls "C:\Solodev" /t /grant Users:F
+icacls "c:\inetpub\Solodev" /t /grant Users:F
 icacls "C:\Windows\Temp" /grant Users:F
 icacls "C:\Windows\System32\inetsrv\config" /t /grant IUSR:F
 
-"C:\tools\php\php.exe" C:\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
-icacls "C:\Solodev" /t /grant Users:F
+"C:\tools\php\php.exe" c:\inetpub\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
+icacls "c:\inetpub\Solodev" /t /grant Users:F
 
 iisreset /start
 
@@ -74,7 +74,7 @@ echo sLinkFile = "C:\Users\Administrator\Desktop\Solodev Admin.lnk" >> CreateSho
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
 echo oLink.TargetPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" >> CreateShortcut.vbs
 echo oLink.Arguments = "localhost --profile-directory=Default " >> CreateShortcut.vbs
-echo oLink.IconLocation = "C:\Solodev\public\www\assets\images\solodev.ico, 0" >> CreateShortcut.vbs
+echo oLink.IconLocation = "c:\inetpub\Solodev\public\www\assets\images\solodev.ico, 0" >> CreateShortcut.vbs
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
