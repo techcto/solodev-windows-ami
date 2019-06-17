@@ -3,8 +3,7 @@ echo ---------------------
 echo Installing MSSql
 echo ---------------------
 
-REM choco install mssqlserver2014express -y --cachelocation c:\temp\choco
-choco install mssql2014express-defaultinstance -y
+choco install sql-server-express
 
 @powershell [Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -OutFile msphpsql.zip https://windows.php.net/downloads/pecl/releases/pdo_sqlsrv/5.6.1/php_pdo_sqlsrv-5.6.1-7.2-nts-vc15-x64.zip
 7z x msphpsql.zip -o.\msphpsql
