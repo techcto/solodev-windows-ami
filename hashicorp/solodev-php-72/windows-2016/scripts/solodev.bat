@@ -1,9 +1,8 @@
 mkdir c:\Solodev
 
-fn="$(aws s3 ls s3://solodev-release | sort | tail -n 1 | awk '{print $4}')"
-aws s3 cp s3://solodev-release/$fn c:\Solodev\Solodev.zip
+$key = Get-S3Object -BucketName solodev-release | Sort-Object LastModified -Descending | Select-Object -First 1 | select Key
+Copy-S3Object -BucketName solodev-release -Key $key."Key" -LocalFile c:\Solodev\Solodev.zip
 
 cd c:\Solodev
-ls -alh
 7z x Solodev.zip
 del Solodev.zip

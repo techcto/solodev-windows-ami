@@ -18,3 +18,4 @@ choco install vcredist2013 -y
 choco install awscli -y
 choco install nodejs-lts -y
 choco install googlechrome -y
+choco install 7zip -y
