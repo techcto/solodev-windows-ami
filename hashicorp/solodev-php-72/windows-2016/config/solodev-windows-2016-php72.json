@@ -41,7 +41,7 @@
         },
         {
             "type": "windows-shell",
-            "inline": [
+            "scripts": [
                 "C:\\Windows\\Temp\\scripts\\base.bat",
                 "C:\\Windows\\Temp\\scripts\\php.bat",
                 "C:\\Windows\\Temp\\scripts\\mongo.bat",
