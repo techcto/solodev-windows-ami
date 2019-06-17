@@ -123,3 +123,5 @@ echo oLink.Arguments = "solodev.zendesk.com/hc/en-us/sections/206208667-Quick-St
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
+
+del "C:\Program Files\Amazon\Ec2ConfigService\Scripts\EC2Init.cmd"
