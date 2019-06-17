@@ -21,9 +21,9 @@ echo [SolodevSpecific]
 echo short_open_tag=On
 echo.
 echo [WebPIChanges]
-echo error_log=C:\Windows\temp\PHP72_errors.log
-echo upload_tmp_dir=C:\Windows\temp
-echo session.save_path=C:\Windows\temp
+echo error_log=C:\Windows\Temp\PHP72_errors.log
+echo upload_tmp_dir=C:\Windows\Temp
+echo session.save_path=C:\Windows\Temp
 echo cgi.force_redirect=0
 echo cgi.fix_pathinfo=1
 echo fastcgi.impersonate=1
