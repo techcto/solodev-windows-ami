@@ -20,7 +20,7 @@ phases:
   build:
     commands:
       - chmod 700 build.sh
-      - ./build.sh hashicorp/solodev-php-56/windows-2016/config solodev-windows-2016-php56.json
+      # - ./build.sh hashicorp/solodev-php-56/windows-2016/config solodev-windows-2016-php56.json
       - ./build.sh hashicorp/solodev-php-72/windows-2016/config solodev-windows-2016-php72.json
   post_build:
     commands:
