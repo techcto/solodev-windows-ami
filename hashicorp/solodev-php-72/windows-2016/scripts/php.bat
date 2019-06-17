@@ -51,3 +51,10 @@ echo extension=php_mongodb.dll
 ) >> "%PHP_DIR%\php.ini"
 
 echo zend_extension = "%PHP_DIR%\ext\ioncube_loader_win_5.6.dll" >> "%PHP_DIR%\php.ini"
+
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/fastCgi "/+[fullPath='%PHP_DIR%\php-cgi.exe']"
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/handlers "/+[name='PHP-Files',path='*.php',verb='GET,HEAD,POST',modules='FastCgiModule',scriptProcessor='%PHP_DIR%\php-cgi.exe',resourceType='Either']"
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/handlers "/+[name='STML-Files',path='*.stml',verb='GET,HEAD,POST',modules='FastCgiModule',scriptProcessor='%PHP_DIR%\php-cgi.exe',resourceType='Either']"
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/defaultDocument "/+files.[value='index.php']"
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/defaultDocument "/+files.[value='index.stml']"
+C:\Windows\System32\inetsrv\appcmd.exe set config /section:system.webServer/defaultDocument "/+files.[value='app.php']"
