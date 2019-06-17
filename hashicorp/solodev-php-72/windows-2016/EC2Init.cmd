@@ -6,12 +6,17 @@ echo ---------------------
 
 iisreset /stop
 
-cd C:\Solodev
+cd C:\inetpub\Solodev
 
-mkdir Solodev\clients\solodev
-copy Solodev\core\aws\Client_Settings.xml Solodev\clients\solodev
+mkdir tmp
+echo installing... >> tmp\app.log
+mkdir clients\solodev
+mkdir clients\solodev\jwt
 
-icacls "C:\Solodev" /t /grant Users:F
+openssl genrsa -passout pass:ocoa -out C:\inetpub\Solodev\clients\solodev\jwt\private.pem 4096
+openssl rsa -pubout -passin pass:ocoa -in C:\inetpub\Solodev\clients\solodev\jwt\private.pem -out C:\inetpub\Solodev\clients\solodev\jwt\public.pem
+
+icacls "C:\inetpub\Solodev" /t /grant Users:F
 
 @powershell invoke-restmethod -uri http://169.254.169.254/latest/meta-data/instance-id > instance_id.txt
 set /p EC2_INSTANCE_ID=<instance_id.txt
@@ -35,7 +40,31 @@ echo dbpath=%MONGO_DIR%\data\db
 net start MongoDB
 "%MONGO_DIR%\bin\mongo.exe" solodev_views --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
 
-cd C:\Solodev\clients\solodev\
+cd C:\inetpub\Solodev\public\www
+(
+echo ^<?xml version="1.0" encoding="UTF-8"?^>
+echo ^<configuration^>^<system.webServer^>^<rewrite^>^<rules^>
+echo ^<rule name="slim" patternSyntax="Wildcard"^>^<match url="*" /^>
+echo ^<conditions^>
+echo ^<add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" /^>
+echo ^<add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" /^>
+echo ^</conditions^>
+echo ^<action type="Rewrite" url="app.php" /^>
+echo ^</rule^>^</rules^>^</rewrite^>^</system.webServer^>^</configuration^>
+) > web.config
+
+cd C:\inetpub\Solodev\clients\solodev\
+(
+echo MYSQL_DATABASE=REPLACE_WITH_DATABASE
+echo MYSQL_USER=REPLACE_WITH_DBUSER
+echo MYSQL_PASSWORD=REPLACE_WITH_DBPASSWORD
+echo MYSQL_HOST=REPLACE_WITH_DBHOST
+echo DBMS=mssqlnative
+echo MONGO_HOST=REPLACE_WITH_MONGOHOST:27017
+echo IS_ISV=
+) > .env
+
+cd C:\inetpub\Solodev\clients\solodev\
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', 'localhost' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content Client_Settings.xml"
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content Client_Settings.xml"
@@ -43,21 +72,21 @@ cd C:\Solodev\clients\solodev\
 @powershell "(Get-Content Client_Settings.xml) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content Client_Settings.xml"
 
 C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
-C:\Windows\System32\inetsrv\appcmd.exe add site /name:"Solodev" /id:1 /physicalPath:"C:\Solodev\public\www"
+C:\Windows\System32\inetsrv\appcmd.exe add site /name:"Solodev" /id:1 /physicalPath:"C:\inetpub\Solodev\public\www"
 C:\Windows\System32\inetsrv\appcmd.exe set site /site.name:Solodev /+bindings.[protocol='http',bindingInformation='*:80:']
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/api" /physicalPath:"C:\Solodev\core\api"
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/CK" /physicalPath:"C:\Solodev\public\www\node_modules\ckeditor-full"
-C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/core" /physicalPath:"C:\Solodev\core\html_core"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/api" /physicalPath:"C:\inetpub\Solodev\core\api"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/CK" /physicalPath:"C:\inetpub\Solodev\public\www\node_modules\ckeditor-full"
+C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/core" /physicalPath:"C:\inetpub\Solodev\core\html_core"
 
 C:\Windows\System32\inetsrv\appcmd.exe stop site /site.name:Solodev
 C:\Windows\System32\inetsrv\appcmd.exe start site /site.name:Solodev
 
-icacls "C:\Solodev" /t /grant Users:F
+icacls "C:\inetpub\Solodev" /t /grant Users:F
 icacls "C:\Windows\Temp" /grant Users:F
 icacls "C:\Windows\System32\inetsrv\config" /t /grant IUSR:F
 
-"C:\tools\php\php.exe" C:\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
-icacls "C:\Solodev" /t /grant Users:F
+"C:\tools\php\php.exe" C:\inetpub\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
+icacls "C:\inetpub\Solodev" /t /grant Users:F
 
 iisreset /start
 
@@ -74,7 +103,7 @@ echo sLinkFile = "C:\Users\Administrator\Desktop\Solodev Admin.lnk" >> CreateSho
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
 echo oLink.TargetPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" >> CreateShortcut.vbs
 echo oLink.Arguments = "localhost --profile-directory=Default " >> CreateShortcut.vbs
-echo oLink.IconLocation = "C:\Solodev\public\www\assets\images\solodev.ico, 0" >> CreateShortcut.vbs
+echo oLink.IconLocation = "C:\inetpub\Solodev\public\www\assets\images\solodev.ico, 0" >> CreateShortcut.vbs
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
