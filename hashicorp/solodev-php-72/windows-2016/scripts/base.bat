@@ -3,8 +3,6 @@ echo ---------------------
 echo Installing Base
 echo ---------------------
 
-Install-Package -Name 'mssqlserver2014express' -ProviderName 'chocolateyget'
-
 @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 
 choco install IIS-WebServerRole IIS-ISAPIFilter IIS-ISAPIExtensions IIS-CGI --source WindowsFeatures
