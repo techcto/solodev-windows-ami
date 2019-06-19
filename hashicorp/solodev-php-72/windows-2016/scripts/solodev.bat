@@ -5,31 +5,31 @@ cd c:\inetpub\Solodev
 
 iisreset /stop
 
-Remove-Item –path c:\inetpub\Solodev\old –recurse
+Remove-Item –path c:\inetpub\Solodev\old –recurse -ErrorAction Ignore
 
-echo '' > solodev.ps1
-echo '$key = Get-S3Object -BucketName solodev-release | Sort-Object LastModified -Descending | Select-Object -First 1 | select Key' >> solodev.ps1
-echo 'Copy-S3Object -BucketName solodev-release -Key $key."Key" -LocalFile c:\inetpub\Solodev\Solodev.zip' >> solodev.ps1
-echo "cd c:\inetpub\Solodev" >> solodev.scmd.bat
-echo "7z x Solodev.zip -onew/" >> solodev.ps1
-echo "del c:\inetpub\Solodev\Solodev.zip" >> solodev.ps1
-echo "Remove-Item old -Recurse -ErrorAction Ignore" >> solodev.ps1
-echo "mkdir old" >> solodev.ps1
-echo "move core old" >> solodev.ps1
-echo "move modules old" >> solodev.ps1
-echo "move public old" >> solodev.ps1
-echo "move vendor old" >> solodev.ps1
-echo "move license old" >> solodev.ps1
-echo "move tests old" >> solodev.ps1
-echo "move composer.json old" >> solodev.ps1
-echo "move composer.lock old" >> solodev.ps1
-echo "move license.txt old" >> solodev.ps1
-echo "move version.txt old" >> solodev.ps1
-echo "move new\* c:\inetpub\Solodev" >> solodev.ps1
+echo "" > solodev.bat
+echo "for /f %%i in ('aws s3 ls solodev-release ^| find /c /v """"') do set /a RELEASE_LENGTH=%%i-1" >> solodev.bat
+echo "for /f ""tokens=4"" %%A in ('aws s3 ls solodev-release ^| sort ^| more /T2 +%%RELEASE_LENGTH%%') do set S3_KEY=%%A" >> solodev.bat
+echo "aws s3 cp s3://solodev-release/%S3_KEY% c:\inetpub\Solodev\Solodev.zip" >> solodev.bat
+echo "cd c:\inetpub\Solodev" >> solodev.bat
+echo "7z x Solodev.zip -onew/" >> solodev.bat
+echo "del c:\inetpub\Solodev\Solodev.zip" >> solodev.bat
+echo "mkdir old" >> solodev.bat
+echo "move core old" >> solodev.bat
+echo "move modules old" >> solodev.bat
+echo "move public old" >> solodev.bat
+echo "move vendor old" >> solodev.bat
+echo "move license old" >> solodev.bat
+echo "move tests old" >> solodev.bat
+echo "move composer.json old" >> solodev.bat
+echo "move composer.lock old" >> solodev.bat
+echo "move license.txt old" >> solodev.bat
+echo "move version.txt old" >> solodev.bat
+echo "move new\* c:\inetpub\Solodev" >> solodev.bat
 
-Remove-Item –path c:\inetpub\Solodev\new –recurse
+Remove-Item –path c:\inetpub\Solodev\new –recurse -ErrorAction Ignore
 
-./solodev.ps1
+./solodev.bat
 ./scmd.ps1
 
 iisreset /start
