@@ -38,17 +38,19 @@ net stop MSSQL$SQLEXPRESS
 net start MSSQL$SQLEXPRESS
 
 set MONGO_DIR=C:\Program Files\MongoDB\Server\3.4
+set MONGO_DATA_DIR=C:\Mongo
 
-mkdir "%MONGO_DIR%\data\db"
-mkdir "%MONGO_DIR%\log"
+cd %MONGO_DIR%
+mkdir "%MONGO_DATA_DIR%\data\db"
+mkdir "%MONGO_DATA_DIR%\log"
 (
-echo logpath=%MONGO_DIR%\log\mongo.log 
-echo dbpath=%MONGO_DIR%\data\db
+echo logpath=%MONGO_DATA_DIR%\log\mongo.log 
+echo dbpath=%MONGO_DATA_DIR%\data\db
 ) > "%MONGO_DIR%\mongod.cfg"
-"%MONGO_DIR%\bin\mongod.exe" --config "%MONGO_DIR%\mongod.cfg" --install
+cd bin
+mongod --config "%MONGO_DIR%\mongod.cfg" --install
 net start MongoDB
-"%MONGO_DIR%\bin\mongo.exe" --eval "use solodev_views"
-"%MONGO_DIR%\bin\mongo.exe" --eval "db.createUser({\"user\": \"root\", \"pwd\": \"password\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
+mongo solodev_views --eval "db.createUser({\"user\": \"root\", \"pwd\": \"%EC2_INSTANCE_ID%\", \"roles\": [ { role: \"readWrite\", db: \"solodev_views\" } ] })"
 
 cd C:\inetpub\Solodev\public\www
 (
@@ -110,7 +112,7 @@ echo sLinkFile = "C:\Users\Administrator\Desktop\Solodev Admin.lnk" >> CreateSho
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
 echo oLink.TargetPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" >> CreateShortcut.vbs
 echo oLink.Arguments = "localhost --profile-directory=Default " >> CreateShortcut.vbs
-echo oLink.IconLocation = "C:\inetpub\Solodev\public\www\assets\images\solodev.ico, 0" >> CreateShortcut.vbs
+echo oLink.IconLocation = "C:\inetpub\Solodev\public\www\favicon.ico, 0" >> CreateShortcut.vbs
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
