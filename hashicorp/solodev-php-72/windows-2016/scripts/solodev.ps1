@@ -27,8 +27,11 @@ echo "move license.txt old" >> scmd.bat
 echo "move version.txt old" >> scmd.bat
 echo "move new\* c:\inetpub\Solodev" >> scmd.bat
 
+$contents = Get-Content 'C:\inetpub\Solodev\scmd.bat'
+Out-File -InputObject $contents -Encoding ASCII 'C:\inetpub\Solodev\scmd.bat'
+
 Remove-Item –path c:\inetpub\Solodev\new –recurse -ErrorAction Ignore
 
-scmd.bat
+.\scmd.bat
 
 iisreset /start
