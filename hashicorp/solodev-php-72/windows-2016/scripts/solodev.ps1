@@ -1,4 +1,4 @@
-mkdir c:\inetpub\Solodev 2> NUL
+mkdir c:\inetpub\Solodev
 cd c:\inetpub\Solodev
 
 iisreset /stop
@@ -10,8 +10,8 @@ echo "aws s3 cp s3://solodev-release/%S3_KEY% c:\inetpub\Solodev\Solodev.zip" >>
 echo "cd c:\inetpub\Solodev" >> scmd.bat
 echo '@powershell Remove-Item -path c:\inetpub\Solodev\new -recurse -ErrorAction Ignore' >> scmd.bat
 echo '@powershell Remove-Item -path c:\inetpub\Solodev\old -recurse -ErrorAction Ignore' >> scmd.bat
-echo 'mkdir c:\inetpub\Solodev\new 2> NUL' >> scmd.bat
-echo 'mkdir c:\inetpub\Solodev\old 2> NUL' >> scmd.bat
+echo 'mkdir c:\inetpub\Solodev\new' >> scmd.bat
+echo 'mkdir c:\inetpub\Solodev\old' >> scmd.bat
 echo 'rm Solodev.zip 2> NUL' >> scmd.bat
 echo "7z x Solodev.zip -oc:\inetpub\Solodev\new\ * -r" >> scmd.bat
 echo "del c:\inetpub\Solodev\Solodev.zip" >> scmd.bat
