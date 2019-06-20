@@ -10,5 +10,3 @@ choco install urlrewrite vcredist2012 vcredist2013 awscli googlechrome 7zip open
 
 Install-PackageProvider -Name NuGet -Force
 Install-Module -Name AWSPowerShell -AllowClobber -Force
-
-SET PHP_DIR=C:\tools\php
