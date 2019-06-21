@@ -41,6 +41,8 @@
         },
         {
             "type": "windows-shell",
+            "elevated_user":"packer", 
+            "elevated_password":"{{.WinRMPassword}}", 
             "scripts": [
                 "./hashicorp/solodev-php-72/windows-2016/scripts/base.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/php.bat",
