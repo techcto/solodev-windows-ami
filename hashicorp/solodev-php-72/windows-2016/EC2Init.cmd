@@ -26,6 +26,7 @@ icacls "C:\inetpub\Solodev" /t /grant Users:F
 set /p EC2_INSTANCE_ID=<instance_id.txt
 del instance_id.txt
 
+choco install mssqlserver2014express -y
 sqlcmd -S .\SQLEXPRESS -Q "CREATE DATABASE solodev"
 sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa ENABLE"
 sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa WITH PASSWORD = '%EC2_INSTANCE_ID%'"
