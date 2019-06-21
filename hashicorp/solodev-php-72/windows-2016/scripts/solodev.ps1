@@ -15,12 +15,12 @@ echo 'mkdir c:\inetpub\Solodev\new' >> scmd.bat
 echo 'mkdir c:\inetpub\Solodev\old' >> scmd.bat
 echo "7z x Solodev.zip -oc:\inetpub\Solodev\new\ * -r" >> scmd.bat
 echo "del c:\inetpub\Solodev\Solodev.zip" >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\core" move core old/' >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\modules" move modules old/' >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\public" move public old/' >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\vendor" move vendor old/' >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\license" move license old/' >> scmd.bat
-echo 'if exist "c:\inetpub\Solodev\tests" move tests old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\core\" move core old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\modules\" move modules old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\public\" move public old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\vendor\" move vendor old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\license\" move license old/' >> scmd.bat
+echo 'if exist "c:\inetpub\Solodev\tests\" move tests old/' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\composer.json" move composer.json old/' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\composer.lock" move composer.lock old/' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\license.txt" move license.txt old/' >> scmd.bat
