@@ -39,22 +39,27 @@
             "source": "hashicorp/solodev-php-72/windows-2016/EC2Init.cmd",
             "destination": "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\EC2Init.cmd"
         },
+        // {
+        //     "type": "windows-shell",
+        //     "scripts": [
+        //         "./hashicorp/solodev-php-72/windows-2016/scripts/base.bat",
+        //         "./hashicorp/solodev-php-72/windows-2016/scripts/php.bat",
+        //         "./hashicorp/solodev-php-72/windows-2016/scripts/mongo.bat",
+        //         "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.bat",
+        //         "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat"
+        //     ]
+        // },
         {
-            "type": "windows-shell",
-            "scripts": [
-                "./hashicorp/solodev-php-72/windows-2016/scripts/base.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/php.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/mongo.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.bat",
-                "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat"
+            "type":"powershell",
+                 "elevated_user":"packer", 
+                 "elevated_password":"{{.WinRMPassword}}", 
+            "inline":[
+                "choco install mssqlserver2014express -y"
             ]
         },
         {
             "type": "powershell",
-            "elevated_user":"packer", 
-            "elevated_password":"{{.WinRMPassword}}", 
             "scripts": [
-                "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/system.ps1"
             ]
