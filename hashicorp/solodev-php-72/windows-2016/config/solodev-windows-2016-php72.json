@@ -51,8 +51,8 @@
         },
         {
             "type":"powershell",
-                 "elevated_user":"packer", 
-                 "elevated_password":"{{.WinRMPassword}}", 
+            "elevated_user":"packer", 
+            "elevated_password":"{{.WinRMPassword}}", 
             "inline":[
                 "choco install mssqlserver2014express -y"
             ]
