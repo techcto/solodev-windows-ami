@@ -3,7 +3,7 @@ echo ---------------------
 echo Installing MSSql
 echo ---------------------
 
-Install-Package -Name 'mssqlserver2014express' -ProviderName 'chocolateyget'
+@powershell Install-Package -Name 'mssqlserver2014express' -ProviderName 'chocolateyget'
 choco install sqlserver-odbcdriver -y
 
 SET PHP_DIR=C:\tools\php
