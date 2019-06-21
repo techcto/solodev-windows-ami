@@ -3,7 +3,7 @@ echo ---------------------
 echo Installing MSSql
 echo ---------------------
 
-choco install sqlserver-odbcdriver -y
+choco install mssqlserver2014express sqlserver-odbcdriver -y
 
 SET PHP_DIR=C:\tools\php
 
