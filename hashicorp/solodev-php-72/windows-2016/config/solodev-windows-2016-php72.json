@@ -52,6 +52,7 @@
         {
             "type": "powershell",
             "scripts": [
+                "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/system.ps1"
             ]
