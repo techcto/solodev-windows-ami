@@ -40,11 +40,6 @@
             "destination": "c:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\EC2Init.cmd"
         },
         {
-            "type": "windows-shell",
-            "scripts": [
-            ]
-        },
-        {
             "type":"powershell",
             "elevated_user":"packer", 
             "elevated_password":"{{.WinRMPassword}}", 
