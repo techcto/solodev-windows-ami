@@ -45,6 +45,7 @@
                 "./hashicorp/solodev-php-72/windows-2016/scripts/base.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/php.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mongo.bat",
+                "./hashicorp/solodev-php-72/windows-2016/scripts/mysql.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/mssql.bat",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/node.bat"
             ]

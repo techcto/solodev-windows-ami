@@ -26,17 +26,11 @@ icacls "C:\inetpub\Solodev" /t /grant Users:F
 set /p EC2_INSTANCE_ID=<instance_id.txt
 del instance_id.txt
 
-choco install mssqlserver2014express -y
-sqlcmd -S .\SQLEXPRESS -Q "CREATE DATABASE solodev"
-sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa ENABLE"
-sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN sa WITH PASSWORD = '%EC2_INSTANCE_ID%'"
-REM sqlcmd -S .\SQLEXPRESS -Q "CREATE LOGIN root WITH PASSWORD = '%EC2_INSTANCE_ID%'"
-REM sqlcmd -S .\SQLEXPRESS -Q "CREATE USER root FOR LOGIN root"
-REM sqlcmd -S .\SQLEXPRESS -Q "ALTER LOGIN root ENABLE"
-sqlcmd -S .\SQLEXPRESS -Q "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE',N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2"
-
-net stop MSSQL$SQLEXPRESS
-net start MSSQL$SQLEXPRESS
+echo sql_mode=NO_ENGINE_SUBSTITUTION >> C:\tools\mysql\current\my.ini
+net stop MySQL
+net start MySQL
+C:\tools\mysql\current\bin\mysql.exe -uroot -e "CREATE DATABASE solodev" 
+C:\tools\mysql\current\bin\mysql.exe -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('%EC2_INSTANCE_ID%');"
 
 set MONGO_DIR=C:\Program Files\MongoDB\Server\3.4
 set MONGO_DATA_DIR=C:\Mongo
@@ -76,10 +70,10 @@ echo DBMS=mssqlnative
 echo MONGO_HOST=REPLACE_WITH_MONGOHOST:27017
 echo IS_ISV=
 ) > .env
-@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', '.\SQLEXPRESS' } | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBHOST', 'localhost' } | Set-Content .env"
 @powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_MONGOHOST', 'localhost' } | Set-Content .env"
 @powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DATABASE', 'solodev' } | Set-Content .env"
-@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBUSER', 'sa'} | Set-Content .env"
+@powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBUSER', 'root'} | Set-Content .env"
 @powershell "(Get-Content .env) | ForEach-Object { $_ -replace 'REPLACE_WITH_DBPASSWORD', '%EC2_INSTANCE_ID%' } | Set-Content .env"
 
 C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
@@ -91,11 +85,10 @@ C:\Windows\System32\inetsrv\appcmd.exe add vdir /app.name:"Solodev/" / /path:"/c
 C:\Windows\System32\inetsrv\appcmd.exe stop site /site.name:Solodev
 C:\Windows\System32\inetsrv\appcmd.exe start site /site.name:Solodev
 
-icacls "C:\inetpub\Solodev" /t /grant Users:F
+"C:\tools\php\php.exe" C:\inetpub\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
+
 icacls "C:\Windows\Temp" /grant Users:F
 icacls "C:\Windows\System32\inetsrv\config" /t /grant IUSR:F
-
-"C:\tools\php\php.exe" C:\inetpub\Solodev\core\update.php solodev %EC2_INSTANCE_ID%
 icacls "C:\inetpub\Solodev" /t /grant Users:F
 
 iisreset /start
