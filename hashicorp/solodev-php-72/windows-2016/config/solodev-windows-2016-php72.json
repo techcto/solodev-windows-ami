@@ -51,8 +51,6 @@
         },
         {
             "type": "powershell",
-            "elevated_user":"packer", 
-            "elevated_password":"{{.WinRMPassword}}", 
             "scripts": [
                 "./hashicorp/solodev-php-72/windows-2016/scripts/solodev.ps1",
                 "./hashicorp/solodev-php-72/windows-2016/scripts/system.ps1"
