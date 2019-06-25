@@ -14,11 +14,8 @@ echo installing... >> tmp\app.log
 mkdir clients\solodev
 
 mkdir clients\solodev\jwt
-openssl genrsa -passout pass:ocoa -out clients\solodev\jwt\private.pem 4096
-openssl rsa -pubout -passin pass:ocoa -in clients\solodev\jwt\private.pem -out clients\solodev\jwt\public.pem
-REM ssh-keygen -t rsa -b 4096 -f jwt\private -P ocoa
-REM ren jwt\private private.pem
-REM ren jwt\private.pub public.pem
+openssl genrsa -passout pass:%EC2_INSTANCE_ID% -out clients\solodev\jwt\private.pem 4096
+openssl rsa -pubout -passin pass:%EC2_INSTANCE_ID% -in clients\solodev\jwt\private.pem -out clients\solodev\jwt\public.pem
 
 icacls "C:\inetpub\Solodev" /t /grant Users:F
 
@@ -26,8 +23,8 @@ icacls "C:\inetpub\Solodev" /t /grant Users:F
 set /p EC2_INSTANCE_ID=<instance_id.txt
 del instance_id.txt
 
-echo sql_mode=NO_ENGINE_SUBSTITUTION >> C:\tools\mysql\current\my.ini
 net stop MySQL
+echo sql_mode=NO_ENGINE_SUBSTITUTION >> C:\tools\mysql\current\my.ini
 net start MySQL
 C:\tools\mysql\current\bin\mysql.exe -uroot -e "CREATE DATABASE solodev" 
 C:\tools\mysql\current\bin\mysql.exe -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('%EC2_INSTANCE_ID%');"
@@ -66,7 +63,6 @@ echo DB_DATABASE=REPLACE_WITH_DATABASE
 echo DB_USER=REPLACE_WITH_DBUSER
 echo DB_PASSWORD=REPLACE_WITH_DBPASSWORD
 echo DB_HOST=REPLACE_WITH_DBHOST
-echo DBMS=mssqlnative
 echo MONGO_HOST=REPLACE_WITH_MONGOHOST:27017
 echo IS_ISV=
 ) > .env
@@ -105,8 +101,8 @@ echo Set oWS = WScript.CreateObject("WScript.Shell") > CreateShortcut.vbs
 echo sLinkFile = "C:\Users\Administrator\Desktop\Solodev Admin.lnk" >> CreateShortcut.vbs
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
 echo oLink.TargetPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" >> CreateShortcut.vbs
-echo oLink.Arguments = "localhost --profile-directory=Default " >> CreateShortcut.vbs
-echo oLink.IconLocation = "C:\inetpub\Solodev\public\www\favicon.ico, 0" >> CreateShortcut.vbs
+echo oLink.Arguments = "localhost --profile-directory=Default" >> CreateShortcut.vbs
+echo oLink.IconLocation = "C:\inetpub\Solodev\public\www\favicon.ico" >> CreateShortcut.vbs
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
@@ -115,7 +111,7 @@ echo Set oWS = WScript.CreateObject("WScript.Shell") > CreateShortcut.vbs
 echo sLinkFile = "C:\Users\Administrator\Desktop\Solodev Quick Start Guide.lnk" >> CreateShortcut.vbs
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
 echo oLink.TargetPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" >> CreateShortcut.vbs
-echo oLink.Arguments = "solodev.zendesk.com/hc/en-us/sections/206208667-Quick-Start-Guide --profile-directory=Default " >> CreateShortcut.vbs
+echo oLink.Arguments = "solodev.zendesk.com/hc/en-us/sections/206208667-Quick-Start-Guide --profile-directory=Default" >> CreateShortcut.vbs
 echo oLink.Save >> CreateShortcut.vbs
 cscript CreateShortcut.vbs
 del CreateShortcut.vbs
