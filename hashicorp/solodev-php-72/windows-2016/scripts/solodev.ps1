@@ -1,14 +1,13 @@
 mkdir c:\inetpub\Solodev
 cd c:\inetpub\Solodev
 
-iisreset /stop
-
 echo "" > scmd.bat
 echo 'rm Solodev.zip 2> NUL' >> scmd.bat
 echo "for /f %%i in ('aws s3 ls solodev-release ^| find /c /v """"') do set /a RELEASE_LENGTH=%%i-1" >> scmd.bat
 echo "for /f ""tokens=4"" %%A in ('aws s3 ls solodev-release ^| sort ^| more /T2 +%%RELEASE_LENGTH%%') do set S3_KEY=%%A" >> scmd.bat
 echo "aws s3 cp s3://solodev-release/%S3_KEY% c:\inetpub\Solodev\Solodev.zip" >> scmd.bat
 echo "cd c:\inetpub\Solodev" >> scmd.bat
+echo "iisreset /stop" >> scmd.bat
 echo '@powershell Remove-Item -path c:\inetpub\Solodev\new -recurse -ErrorAction Ignore' >> scmd.bat
 echo '@powershell Remove-Item -path c:\inetpub\Solodev\old -recurse -ErrorAction Ignore' >> scmd.bat
 echo 'mkdir c:\inetpub\Solodev\new' >> scmd.bat
@@ -37,10 +36,10 @@ echo "move composer.lock ../" >> scmd.bat
 echo "move license.txt ../" >> scmd.bat
 echo "move version.txt ../" >> scmd.bat
 echo "cd ../" >> scmd.bat
+echo "iisreset /start" >> scmd.bat
+echo "php core/update.php" >> scmd.bat
 
 $contents = Get-Content scmd.bat
 Out-File -InputObject $contents -Encoding ASCII scmd.bat
 
-.\scmd.bat
-
-iisreset /start
+scmd.bat
