@@ -14,6 +14,8 @@ echo 'mkdir c:\inetpub\Solodev\new' >> scmd.bat
 echo 'mkdir c:\inetpub\Solodev\old' >> scmd.bat
 echo "7z x Solodev.zip -oc:\inetpub\Solodev\new\ * -r" >> scmd.bat
 echo "del c:\inetpub\Solodev\Solodev.zip" >> scmd.bat
+echo 'icacls "C:\Windows\Temp" /t /grant Users:F' >> scmd.bat
+echo 'icacls "C:\inetpub\Solodev\new" /t /grant Users:F' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\core\" move core old/' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\modules\" move modules old/' >> scmd.bat
 echo 'if exist "c:\inetpub\Solodev\public\" move public old/' >> scmd.bat
