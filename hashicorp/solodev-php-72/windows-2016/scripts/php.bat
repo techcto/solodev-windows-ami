@@ -38,6 +38,7 @@ echo max_execution_time=300
 echo memory_limit = 512M
 echo date.timezone=America/New_York
 echo extension_dir="%PHP_DIR%\ext"
+echo expose_php = Off
 echo.
 echo [ExtensionList]
 echo extension=php_sqlsrv.dll
