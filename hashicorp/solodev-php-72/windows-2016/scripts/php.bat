@@ -7,7 +7,7 @@ choco install php -version 7.2.19 -y --params '"/InstallDir:c:\tools\php"'
 
 SET PHP_DIR=C:\tools\php
 
-@powershell Invoke-WebRequest -OutFile ioncube.zip https://downloads.ioncube.com/loader_downloads/ioncube_loaders_win_nonts_vc15_x86-64.zip
+@powershell [Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -OutFile ioncube.zip https://downloads.ioncube.com/loader_downloads/ioncube_loaders_win_nonts_vc15_x86-64.zip
 7z x ioncube.zip
 copy /Y ioncube\ioncube_loader_win_7.2.dll "%PHP_DIR%\ext" 
 rd /s /q ioncube
