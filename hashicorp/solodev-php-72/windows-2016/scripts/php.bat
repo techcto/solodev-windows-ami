@@ -41,10 +41,10 @@ echo extension_dir="%PHP_DIR%\ext"
 echo expose_php = Off
 echo.
 echo [ExtensionList]
-echo extension=php_sqlsrv.dll
-echo extension=php_pdo_sqlsrv.dll
-REM echo extension=php_mysql.dll
-REM echo extension=php_mysqli.dll
+REM echo extension=php_sqlsrv.dll
+REM echo extension=php_pdo_sqlsrv.dll
+echo extension=php_mysql.dll
+echo extension=php_mysqli.dll
 echo extension=php_mbstring.dll
 echo extension=php_gd2.dll
 echo extension=php_gettext.dll
@@ -53,8 +53,8 @@ echo extension=php_exif.dll
 echo extension=php_xmlrpc.dll
 echo extension=php_openssl.dll
 echo extension=php_soap.dll
-REM echo extension=php_pdo_mysql.dll
-REM echo extension=php_pdo_sqlite.dll
+echo extension=php_pdo_mysql.dll
+echo extension=php_pdo_sqlite.dll
 echo extension=php_imap.dll
 echo extension=php_tidy.dll
 echo extension=php_mongodb.dll
