@@ -3,4 +3,4 @@ echo ---------------------
 echo Installing Mysql
 echo ---------------------
 
-choco install mysql -y --initialize-insecure
+choco install mysql -version 5.7.18 -y --initialize-insecure
