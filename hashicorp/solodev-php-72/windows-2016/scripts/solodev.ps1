@@ -44,4 +44,4 @@ echo "php core/update.php" >> scmd.bat
 $contents = Get-Content scmd.bat
 Out-File -InputObject $contents -Encoding ASCII scmd.bat
 
-scmd.bat
+c:\inetpub\Solodev\scmd.bat
